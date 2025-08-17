@@ -28,10 +28,10 @@ const numberDetailsScheme = mongoose.Schema({
     row_id: {
         type: String,
     },
-    result_post_name: {
+    result_post: {
         type: String,
     },
-    result_post_type: {
+    result_schedule: {
         type: String,
     },
     result_date: {

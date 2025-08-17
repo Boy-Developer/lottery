@@ -38,16 +38,16 @@ const getResultNumberDetailById = asyncHandler(async (req, res) => {
 //@access private
 const createResultNumberDetail = asyncHandler(async (req, res) => {
     const reqNumberDetails = req.body;
-    reqNumberDetails.forEach(async reqNumberDetail => {
-        const { result_post_name, result_post_type, result_date, result_lottery_2number, result_lottery_3number, result_lottery_4number } = reqNumberDetail;
-        if (!result_post_name || !result_post_type || !result_date) {
-            return res.status(200).json(new ResultMessage(CODE.REQUIRE, MESSAGE.REQUIRE));
+    for (const reqNumberDetail of reqNumberDetails) {
+        const { result_post, result_schedule, result_date, result_lottery_2number, result_lottery_3number, result_lottery_4number } = reqNumberDetail;
+        if (!result_post || !result_schedule || !result_date) {
+            res.status(200).json(new ResultMessage(CODE.REQUIRE, MESSAGE.REQUIRE));
         }
         const numberDetail = await NumberDetail.create(
             {
                 type: LOTTERY_TYPE.LOTTERY_RESULT,
-                result_post_name: result_post_name,
-                result_post_type: result_post_type,
+                result_post: result_post,
+                result_schedule: result_schedule,
                 result_date: result_date,
                 result_lottery_2number: result_lottery_2number,
                 result_lottery_3number: result_lottery_3number,
@@ -55,7 +55,7 @@ const createResultNumberDetail = asyncHandler(async (req, res) => {
                 area_id: req.user.id
             }
         );
-    });
+    }
     res.status(200).json(new ResultMessage(CODE.SUCCESS, MESSAGE.INSERTED, reqNumberDetails));
 });
 
@@ -128,7 +128,7 @@ const fetchByDate = asyncHandler(async (req, res) => {
     try {
         // Find numberDetails based on the query
         const numberDetails = await NumberDetail.find(query)
-            .select('_id type result_post_name result_post_type result_date result_lottery_2number result_lottery_3number result_lottery_4number createdAt updatedAt')
+            .select('_id type result_post result_schedule result_date result_lottery_2number result_lottery_3number result_lottery_4number createdAt updatedAt')
             .exec();
 
         // Send the final result
