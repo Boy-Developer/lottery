@@ -39,7 +39,7 @@ const getResultNumberDetailById = asyncHandler(async (req, res) => {
 const createResultNumberDetail = asyncHandler(async (req, res) => {
     const reqNumberDetails = req.body;
     for (const reqNumberDetail of reqNumberDetails) {
-        const { result_post, result_schedule, result_date, result_lottery_2number, result_lottery_3number, result_lottery_4number } = reqNumberDetail;
+        const { result_post, result_schedule, result_date, result_time, result_lottery_2number, result_lottery_3number, result_lottery_4number } = reqNumberDetail;
         if (!result_post || !result_schedule || !result_date) {
             res.status(200).json(new ResultMessage(CODE.REQUIRE, MESSAGE.REQUIRE));
         }
@@ -49,6 +49,7 @@ const createResultNumberDetail = asyncHandler(async (req, res) => {
                 result_post: result_post,
                 result_schedule: result_schedule,
                 result_date: result_date,
+                result_time: result_time,
                 result_lottery_2number: result_lottery_2number,
                 result_lottery_3number: result_lottery_3number,
                 result_lottery_4number: result_lottery_4number,
@@ -128,7 +129,7 @@ const fetchByDate = asyncHandler(async (req, res) => {
     try {
         // Find numberDetails based on the query
         const numberDetails = await NumberDetail.find(query)
-            .select('_id type result_post result_schedule result_date result_lottery_2number result_lottery_3number result_lottery_4number createdAt updatedAt')
+            .select('_id type result_post result_schedule result_date result_time result_lottery_2number result_lottery_3number result_lottery_4number createdAt updatedAt')
             .exec();
 
         // Send the final result

@@ -37,6 +37,9 @@ const numberDetailsScheme = mongoose.Schema({
     result_date: {
         type: Date,
     },
+    result_time: {
+        type: String,
+    },
     result_lottery_2number: {
         type: Number,
     },
