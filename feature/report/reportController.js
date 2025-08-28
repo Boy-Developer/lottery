@@ -31,7 +31,7 @@ const getCompareReport = asyncHandler(async (req, res) => {
     }
     const resultQuery = {};
     if (date) {
-        resultQuery.data = date;
+        resultQuery.result_date = date;
     }
     resultQuery.type = LOTTERY_TYPE.LOTTERY_RESULT;
 
