@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const ShortcutModel = require("./model/shortcutModel");
 const { ResultMessage } = require("../../app/pattern/response/resultMessage");
 const { SHORTCUT_TYPE, MESSAGE, CODE } = require("../../app/constant/constants");
+const { createAppLog } = require('../app_log_history/appLogHistoryController');
 
 //@desc Get all shortcut detail
 //@route GET /api/shortcut
@@ -67,6 +68,17 @@ const getScheduleById = asyncHandler(async (req, res) => {
 //@route POST /api/shortcut
 //@access private
 const createPost = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'write',
+        feature: 'ShortCutPost',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:POST, end-point:DNS/api/shortcut, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const { val, key } = req.body;
     if (!val || !key) {
         return res.status(200).json(new ResultMessage(CODE.REQUIRE, MESSAGE.REQUIRE));
@@ -86,6 +98,17 @@ const createPost = asyncHandler(async (req, res) => {
 //@route POST /api/shortcut
 //@access private
 const createSchedule = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'write',
+        feature: 'ShortCutSchedule',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:POST, end-point:DNS/api/shortcut, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const { val, key } = req.body;
     if (!val || !key) {
         return res.status(200).json(new ResultMessage(CODE.REQUIRE, MESSAGE.REQUIRE));
@@ -105,6 +128,16 @@ const createSchedule = asyncHandler(async (req, res) => {
 //@route DELETE /api/result_number_detail/:id
 //@access private
 const deletePostById = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'delete',
+        feature: 'ShortCutPost',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:DELETE, end-point:DNS/api/result_number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
 
     try {
         const shortcutDetail = await ShortcutModel.findOne({ _id: req.params.id, type: SHORTCUT_TYPE.POST});
@@ -132,6 +165,17 @@ const deletePostById = asyncHandler(async (req, res) => {
 //@access private
 const deleteScheduleById = asyncHandler(async (req, res) => {
 
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'delete',
+        feature: 'ShortCutSchedule',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:DELETE, end-point:DNS/api/result_number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const shortcutDetail = await ShortcutModel.findOne({ _id: req.params.id, type: SHORTCUT_TYPE.SCHEDULE});
         if (!shortcutDetail) {
@@ -157,6 +201,17 @@ const deleteScheduleById = asyncHandler(async (req, res) => {
 //@route PUT /api/result_number_detail/:id
 //@access private
 const updatePostById = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'edit',
+        feature: 'ShortCutPost',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:PUT, end-point:DNS/api/result_number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const shortcut = await ShortcutModel.findOne({ _id: req.params.id, type: SHORTCUT_TYPE.POST});
         if (!shortcut) {
@@ -186,6 +241,18 @@ const updatePostById = asyncHandler(async (req, res) => {
 //@route PUT /api/result_number_detail/:id
 //@access private
 const updateScheduleById = asyncHandler(async (req, res) => {
+
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'edit',
+        feature: 'ShortCutSchedule',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:PUT, end-point:DNS/api/result_number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const shortcut = await ShortcutModel.findOne({ _id: req.params.id, type: SHORTCUT_TYPE.SCHEDULE});
         if (!shortcut) {

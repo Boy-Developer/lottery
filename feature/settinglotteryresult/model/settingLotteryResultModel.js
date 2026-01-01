@@ -1,28 +1,25 @@
 const mongoose = require("mongoose");
 
-const loginSessionScheme = mongoose.Schema({
+const settingLotteryResultScheme = mongoose.Schema({
     area_id: {
         type: mongoose.Schema.Types.ObjectId,
         reuqired: true,
         ref: "USER_API",
     },
-    username: {
+    text: {
         type: String,
     },
-    user_id: {
+    time: {
         type: String,
     },
-    login_id: {
+    index_rm : {
         type: String,
     },
-    ip: {
+    row_rm : {
         type: String,
     },
-    location: {
+    lucky_num : {
         type: String,
-    },
-    session_status: {
-        type: Number,
     },
 },
     {
@@ -30,4 +27,4 @@ const loginSessionScheme = mongoose.Schema({
     }
 );
 
-module.exports = mongoose.model("LTR_LOGIN_SESSION", loginSessionScheme);
+module.exports = mongoose.model("LTR_SETTING_LOTTERY_RESULT", settingLotteryResultScheme);

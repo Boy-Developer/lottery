@@ -2,9 +2,10 @@ const asyncHandler = require("express-async-handler");
 const PostDetail = require("./model/postDetailsModel");
 const { ResultMessage } = require("../../app/pattern/response/resultMessage");
 const { POST_TYPE, MESSAGE, CODE } = require("../../app/constant/constants");
+const { createAppLog } = require('../app_log_history/appLogHistoryController');
 
 //@desc Get all result number detail
-//@route GET /api/result_number_detail
+//@route GET /api/post_category_detail
 //@access private
 const getAllPostCategoryDetail = asyncHandler(async (req, res) => {
     const postCategory = await PostDetail.find({ type: POST_TYPE.POST_CATEGORY});
@@ -19,7 +20,7 @@ const getAllPostCategoryDetail = asyncHandler(async (req, res) => {
 });
 
 //@desc Get all result number detail
-//@route GET /api/result_number_detail
+//@route GET /api/post_category_detail
 //@access private
 const getAllPostSubCategoryDetail = asyncHandler(async (req, res) => {
     const postSubCategory = await PostDetail.find({ type: POST_TYPE.POST_SUB_CATEGORY});
@@ -34,7 +35,7 @@ const getAllPostSubCategoryDetail = asyncHandler(async (req, res) => {
 });
 
 //@desc Get all result number detail
-//@route GET /api/result_number_detail
+//@route GET /api/post_category_detail
 //@access private
 const getPostSubCategoryByCategoryId = asyncHandler(async (req, res) => {
     const postSubCategory = await PostDetail.find({ post_category_id: req.params.id});
@@ -49,9 +50,20 @@ const getPostSubCategoryByCategoryId = asyncHandler(async (req, res) => {
 });
 
 //@desc create result number detail
-//@route POST /api/result_number_detail
+//@route POST /api/post_category_detail
 //@access private
 const createPostCategory = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'write',
+        feature: 'PostCategoryDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:POST, end-point:DNS/api/post_category_detail, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const { post_category } = req.body;
     if (!post_category) {
         return res.status(200).json(new ResultMessage(CODE.REQUIRE, MESSAGE.REQUIRE));
@@ -60,16 +72,27 @@ const createPostCategory = asyncHandler(async (req, res) => {
         {
             type: POST_TYPE.POST_CATEGORY,
             post_category: post_category,
-            user_id: req.user.id
+            area_id: req.user.id
         }
     );
     res.status(200).json(new ResultMessage(CODE.SUCCESS, MESSAGE.INSERTED, postDetail));
 });
 
 //@desc create result number detail
-//@route POST /api/result_number_detail
+//@route POST /api/post_category_detail
 //@access private
 const createPostSubCategory = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'write',
+        feature: 'PostCategoryDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:POST, end-point:DNS/api/post_category_detail, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const { post_category_id, post_name } = req.body;
     if (!post_category_id || !post_name) {
         return res.status(200).json(new ResultMessage(CODE.REQUIRE, MESSAGE.REQUIRE));
@@ -92,16 +115,26 @@ const createPostSubCategory = asyncHandler(async (req, res) => {
             type: POST_TYPE.POST_SUB_CATEGORY,
             post_category_id: post_category_id,
             post_name: post_name,
-            user_id: req.user.id
+            area_id: req.user.id
         }
     );
     res.status(200).json(new ResultMessage(CODE.SUCCESS, MESSAGE.INSERTED, postDetail));
 });
 
 //@desc Delete result number detail
-//@route DELETE /api/result_number_detail/:id
+//@route DELETE /api/post_category_detail/:id
 //@access private
 const deletePostCategoryDetail = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'delete',
+        feature: 'PostCategoryDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:DELETE, end-point:DNS/api/post_category_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
 
     try {
         const postDetail = await PostDetail.findOne({ _id: req.params.id, type: POST_TYPE.POST_CATEGORY});
@@ -126,9 +159,19 @@ const deletePostCategoryDetail = asyncHandler(async (req, res) => {
 });
 
 //@desc Delete result number detail
-//@route DELETE /api/result_number_detail/:id
+//@route DELETE /api/post_category_detail/:id
 //@access private
 const deletePostSubCategoryDetail = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'delete',
+        feature: 'PostCategoryDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:DELETE, end-point:DNS/api/post_category_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
 
     try {
         const postDetail = await PostDetail.findOne({ _id: req.params.id, type: POST_TYPE.POST_SUB_CATEGORY});
@@ -151,4 +194,40 @@ const deletePostSubCategoryDetail = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { getAllPostCategoryDetail, getAllPostSubCategoryDetail, getPostSubCategoryByCategoryId, createPostCategory, createPostSubCategory, deletePostCategoryDetail, deletePostSubCategoryDetail };
+//@desc update post sub category detail
+//@route PUT /api/post_sub_category_detail/:id
+//@access private
+const updatePostSubCategoryDetail = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'edit',
+        feature: 'PostCategoryDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:PUT, end-point:DNS/api/post_sub_category_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
+    const { post_name } = req.body;
+
+    let postDetail;
+    try {
+        postDetail = await PostDetail.findOne({ _id: req.params.id, type: POST_TYPE.POST_SUB_CATEGORY});
+        if (!postDetail) {
+            return res.status(200).json(new ResultMessage(CODE.NOT_FOUND, MESSAGE.NOT_FOUND));
+        }
+        if (postDetail.area_id?.toString().trim() !== String(req.user.id).trim()) {
+            return res.status(403).json(new ResultMessage(CODE.CREDENTIAL, MESSAGE.CREDENTIAL));
+        }
+    } catch (error) {
+        return res.status(200).json(new ResultMessage(CODE.NOT_FOUND, MESSAGE.NOT_FOUND));
+    }
+
+    postDetail.post_name = post_name || postDetail.post_name;
+
+    const updatedPostDetail = await postDetail.save();
+    return res.status(200).json(new ResultMessage(CODE.SUCCESS, MESSAGE.UPDATED, updatedPostDetail));
+});
+
+module.exports = { getAllPostCategoryDetail, getAllPostSubCategoryDetail, getPostSubCategoryByCategoryId, createPostCategory, createPostSubCategory, deletePostCategoryDetail, deletePostSubCategoryDetail, updatePostSubCategoryDetail };

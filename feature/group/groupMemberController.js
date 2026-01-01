@@ -2,11 +2,23 @@ const asyncHandler = require("express-async-handler");
 const GroupMember = require("./model/groupMemberModel");
 const { ResultMessage } = require("../../app/pattern/response/resultMessage");
 const { CODE, MESSAGE } = require("../../app/constant/constants");
+const { createAppLog } = require('../app_log_history/appLogHistoryController');
 
 //@desc Get all group member
 //@route GET /api/group_member
 //@access private
 const getAllGroupMember = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'read',
+        feature: 'GroupMember',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:GET, end-point:DNS/api/group_member, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const groupMember = await GroupMember.find();
 
     //DEV ONLY delete all
@@ -19,9 +31,19 @@ const getAllGroupMember = asyncHandler(async (req, res) => {
 });
 
 //@desc Get by id group member
-//@route GET /api/group_member
+//@route GET /api/group_member/:id
 //@access private
 const getGroupMemberById = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'read',
+        feature: 'GroupMember',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:GET, end-point:DNS/api/group_member/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
     try {
         const { id } = req.params;
         const groupMember = await GroupMember.findById(id);
@@ -44,6 +66,17 @@ const getGroupMemberById = asyncHandler(async (req, res) => {
 //@route POST /api/group_member
 //@access private
 const createGroupMember = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'write',
+        feature: 'GroupMember',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:POST, end-point:DNS/api/group_member, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const { real_name, nick_name, phone, lottery_type, multi_x2, multi_x3,
         pay_x2, pay_x3, pay_x4, pay_x5, percentage, key,
         multi_x2up, multi_x3up, pay_x2up, pay_x3up
@@ -82,6 +115,16 @@ const createGroupMember = asyncHandler(async (req, res) => {
 //@route DELETE /api/group_member/:id
 //@access private
 const deleteGroupMember = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'delete',
+        feature: 'GroupMember',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:DELETE, end-point:DNS/api/group_member/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
 
     try {
         const groupMember = await GroupMember.findById({ _id: req.params.id });
@@ -108,6 +151,17 @@ const deleteGroupMember = asyncHandler(async (req, res) => {
 //@route PUT /api/group_member/:id
 //@access private
 const updateGroupMember = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'edit',
+        feature: 'GroupMember',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:PUT, end-point:DNS/api/group_member/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const groupMember = await GroupMember.findById({ _id: req.params.id });
         if (!groupMember) {

@@ -3,12 +3,23 @@ const NumberDetail = require("./model/numberDetailsModel");
 const { ResultMessage } = require("../../app/pattern/response/resultMessage");
 const { LOTTERY_TYPE, MESSAGE, CODE } = require("../../app/constant/constants");
 const { v4: uuidv4 } = require('uuid');
-
+const { createAppLog } = require('../app_log_history/appLogHistoryController');
 
 //@desc Get all number detail
 //@route GET /api/number_detail
 //@access private
 const getAllNumberDetail = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'read',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:GET, end-point:DNS/api/number_detail, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const numberDetail = await NumberDetail.find({ type: LOTTERY_TYPE.LOTTERY_NUMBER});
 
     //DEV ONLY delete all
@@ -21,9 +32,19 @@ const getAllNumberDetail = asyncHandler(async (req, res) => {
 });
 
 //@desc Get by id number detail
-//@route GET /api/number_detail
+//@route GET /api/number_detail/:id
 //@access private
 const getNumberDetailById = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'read',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:GET, end-point:DNS/api/number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
     try {
         const numberDetail = await NumberDetail.findOne({ _id: req.params.id,  type: LOTTERY_TYPE.LOTTERY_NUMBER });
         if (!numberDetail) {
@@ -39,6 +60,17 @@ const getNumberDetailById = asyncHandler(async (req, res) => {
 //@route POST /api/number_detail
 //@access private
 const createNumberDetail = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'write',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:POST, end-point:DNS/api/number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const dataEntries = [];
 
     req.body.forEach(item => {
@@ -100,6 +132,17 @@ const createNumberDetail = asyncHandler(async (req, res) => {
 //@route POST /api/number_detail
 //@access private
 const createNumberDetailV2 = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'write',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:POST, end-point:DNS/api/number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const dataEntries = [];
 
     req.body.forEach(item => {
@@ -157,6 +200,17 @@ const createNumberDetailV2 = asyncHandler(async (req, res) => {
 //@access private
 const deleteNumberDetail = asyncHandler(async (req, res) => {
 
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'delete',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:DELETE, end-point:DNS/api/number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const numberDetail = await NumberDetail.findOne({ _id: req.params.id, type: LOTTERY_TYPE.LOTTERY_RESULT});
         if (!numberDetail) {
@@ -182,6 +236,18 @@ const deleteNumberDetail = asyncHandler(async (req, res) => {
 //@route PUT /api/number_detail/:id
 //@access private
 const updateNumberDetail = asyncHandler(async (req, res) => {
+
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'edit',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:PUT, end-point:DNS/api/number_detail/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const numberDetail = await NumberDetail.findOne({ _id: req.params.id, type: LOTTERY_TYPE.LOTTERY_RESULT});
         if (!numberDetail) {
@@ -354,6 +420,17 @@ const inputCheckNumberFilterV2 = asyncHandler(async (req, res) => {
 //@route POST /api/number_details/inp_submit
 //@access private
 const createCompareNumberDetail = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'write',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:POST, end-point:DNS/api/number_details/inp_submit, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     const reqNumberDetails = req.body;
     const numberDetailResponse = [];
 
@@ -389,6 +466,17 @@ const createCompareNumberDetail = asyncHandler(async (req, res) => {
 //@access private
 const deleteCompareNumberDetail = asyncHandler(async (req, res) => {
 
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'delete',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:DELETE, end-point:DNS/api/number_details/inp_submit/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const numberDetail = await NumberDetail.findOne({ _id: req.params.id, type: LOTTERY_TYPE.LOTTERY_COMPARE});
         if (!numberDetail) {
@@ -414,6 +502,17 @@ const deleteCompareNumberDetail = asyncHandler(async (req, res) => {
 //@route PUT /api/number_details/inp_submit/:id
 //@access private
 const updateCompareNumberDetail = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'edit',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:PUT, end-point:DNS/api/number_details/inp_submit/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const numberDetail = await NumberDetail.findOne({ _id: req.params.id, type: LOTTERY_TYPE.LOTTERY_COMPARE});
         if (!numberDetail) {
@@ -471,6 +570,17 @@ const getPageByDateAndGroup = asyncHandler(async (req, res) => {
 //@route PUT /api/number_detail/update/:id
 //@access private
 const updateNumberDetailV2 = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'edit',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:PUT, end-point:DNS/api/number_detail/update/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
+
     try {
         const id = req.params.id;
         console.log("Requested ID:", id);
@@ -501,6 +611,16 @@ const updateNumberDetailV2 = asyncHandler(async (req, res) => {
 //@route DELETE /api/number_detail/delete/:id
 //@access private
 const deleteNumberDetailV2 = asyncHandler(async (req, res) => {
+    // proccess store log
+    const app_log = {
+        user_id: req.body.login_user_id,
+        action: 'delete',
+        feature: 'NumberDetail',
+        old_data: '',
+        new_data: JSON.stringify(req.body),
+        client_access: 'methord:DELETE, end-point:DNS/api/number_detail/delete/:id, req-payload: new_data',
+    };
+    createAppLog(app_log);
 
     try {
         const id = req.params.id;
