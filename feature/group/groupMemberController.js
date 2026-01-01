@@ -8,17 +8,6 @@ const { createAppLog } = require('../app_log_history/appLogHistoryController');
 //@route GET /api/group_member
 //@access private
 const getAllGroupMember = asyncHandler(async (req, res) => {
-    // proccess store log
-    const app_log = {
-        user_id: req.body.login_user_id,
-        action: 'read',
-        feature: 'GroupMember',
-        old_data: '',
-        new_data: JSON.stringify(req.body),
-        client_access: 'methord:GET, end-point:DNS/api/group_member, req-payload: new_data',
-    };
-    createAppLog(app_log);
-
     const groupMember = await GroupMember.find();
 
     //DEV ONLY delete all
@@ -34,16 +23,6 @@ const getAllGroupMember = asyncHandler(async (req, res) => {
 //@route GET /api/group_member/:id
 //@access private
 const getGroupMemberById = asyncHandler(async (req, res) => {
-    // proccess store log
-    const app_log = {
-        user_id: req.body.login_user_id,
-        action: 'read',
-        feature: 'GroupMember',
-        old_data: '',
-        new_data: JSON.stringify(req.body),
-        client_access: 'methord:GET, end-point:DNS/api/group_member/:id, req-payload: new_data',
-    };
-    createAppLog(app_log);
     try {
         const { id } = req.params;
         const groupMember = await GroupMember.findById(id);

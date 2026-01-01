@@ -8,17 +8,6 @@ const { createAppLog } = require('../app_log_history/appLogHistoryController');
 //@route GET /api/schedule_detail
 //@access private
 const getAllSchedules = asyncHandler(async (req, res) => {
-    // proccess store log
-    const app_log = {
-        user_id: req.body.login_user_id,
-        action: 'read',
-        feature: 'ScheduleDetail',
-        old_data: '',
-        new_data: JSON.stringify(req.body),
-        client_access: 'methord:GET, end-point:DNS/api/schedule_detail, req-payload: new_data',
-    };
-    createAppLog(app_log);
-
     try {
         const schedules = await Schedule.find({});
         return res.status(200).json(new ResultMessage(CODE.SUCCESS, MESSAGE.SUCCESS, schedules));

@@ -101,5 +101,4 @@ const developerMode = asyncHandler(async (req, res) => {
     res.json({encryptedData: encrypt(jsonString,  process.env.AES_PASSWORD, 482)});
 });
 
-
 module.exports = { registerUser, loginUser, currentUser, developerMode };

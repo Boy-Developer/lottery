@@ -49,7 +49,7 @@ function decrypt(encryptedData, password) {
         console.error('Decryption error:', error);
         return "error";
     }
-}
+};
 
 // Function to encrypt data with expiration check
 function encrypt(data, password, expirationMinutes) {
@@ -66,6 +66,40 @@ function encrypt(data, password, expirationMinutes) {
     // Combine salt, iv, expiration time, and encrypted data
     const combined = salt.toString() + iv.toString() + expirationTime.toString() + encrypted.toString();
     return combined; // Return combined string
-}
+};
 
-module.exports = { encrypt, decrypt };
+// Function to decrypt password
+function decryptPwd(encryptedData, password){
+    try {
+        // Extract salt, iv, expiration time, and encrypted data
+        const saltHex = encryptedData.substr(0, 32); // First 32 characters for salt
+        const ivHex = encryptedData.substr(32, 32);  // Next 32 characters for IV
+        const encryptedHex = encryptedData.substr(64); // Remaining characters
+
+        // Convert hex to WordArray
+        const salt = CryptoJS.enc.Hex.parse(saltHex);
+        const iv = CryptoJS.enc.Hex.parse(ivHex);
+        const encrypted = CryptoJS.enc.Base64.parse(encryptedHex);
+
+        // Derive key and decrypt
+        const key = deriveKey(password, salt);
+        const decrypted = CryptoJS.AES.decrypt(
+            { ciphertext: encrypted },
+            key,
+            { iv: iv }
+        );
+
+        const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+
+        // Check if decryption failed (empty string = wrong key or format)
+        if (!decryptedText) {
+            return "invalid";
+        }
+
+        return decryptedText;
+    } catch (error) {
+        console.error('Decryption error:', error);
+        return "error";
+    }
+};
+module.exports = { encrypt, decrypt, decryptPwd };

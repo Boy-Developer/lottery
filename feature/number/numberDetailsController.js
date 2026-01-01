@@ -9,16 +9,6 @@ const { createAppLog } = require('../app_log_history/appLogHistoryController');
 //@route GET /api/number_detail
 //@access private
 const getAllNumberDetail = asyncHandler(async (req, res) => {
-    // proccess store log
-    const app_log = {
-        user_id: req.body.login_user_id,
-        action: 'read',
-        feature: 'NumberDetail',
-        old_data: '',
-        new_data: JSON.stringify(req.body),
-        client_access: 'methord:GET, end-point:DNS/api/number_detail, req-payload: new_data',
-    };
-    createAppLog(app_log);
 
     const numberDetail = await NumberDetail.find({ type: LOTTERY_TYPE.LOTTERY_NUMBER});
 
@@ -35,16 +25,6 @@ const getAllNumberDetail = asyncHandler(async (req, res) => {
 //@route GET /api/number_detail/:id
 //@access private
 const getNumberDetailById = asyncHandler(async (req, res) => {
-    // proccess store log
-    const app_log = {
-        user_id: req.body.login_user_id,
-        action: 'read',
-        feature: 'NumberDetail',
-        old_data: '',
-        new_data: JSON.stringify(req.body),
-        client_access: 'methord:GET, end-point:DNS/api/number_detail/:id, req-payload: new_data',
-    };
-    createAppLog(app_log);
     try {
         const numberDetail = await NumberDetail.findOne({ _id: req.params.id,  type: LOTTERY_TYPE.LOTTERY_NUMBER });
         if (!numberDetail) {
