@@ -8,17 +8,6 @@ const { createAppLog } = require('../app_log_history/appLogHistoryController');
 //@route GET /api/result_number_detail
 //@access private
 const getAllResultNumberDetail = asyncHandler(async (req, res) => {
-    // proccess store log
-    const app_log = {
-        user_id: req.body.login_user_id,
-        action: 'read',
-        feature: 'NumberDetail',
-        old_data: '',
-        new_data: JSON.stringify(req.body),
-        client_access: 'methord:GET, end-point:DNS/api/result_number_detail, req-payload: new_data',
-    };
-    createAppLog(app_log);
-
     const numberDetail = await NumberDetail.find({ type: LOTTERY_TYPE.LOTTERY_RESULT});
 
     // DEV ONLY delete all
@@ -34,17 +23,6 @@ const getAllResultNumberDetail = asyncHandler(async (req, res) => {
 //@route GET /api/result_number_detail
 //@access private
 const getResultNumberDetailById = asyncHandler(async (req, res) => {
-    // proccess store log
-    const app_log = {
-        user_id: req.body.login_user_id,
-        action: 'read',
-        feature: 'NumberDetail',
-        old_data: '',
-        new_data: JSON.stringify(req.body),
-        client_access: 'methord:GET, end-point:DNS/api/result_number_detail/:id, req-payload: new_data',
-    };
-    createAppLog(app_log);
-
     try {
         const numberDetail = await NumberDetail.findOne({ _id: req.params.id, type: LOTTERY_TYPE.LOTTERY_RESULT});
         if (!numberDetail) {
@@ -62,7 +40,7 @@ const getResultNumberDetailById = asyncHandler(async (req, res) => {
 const createResultNumberDetail = asyncHandler(async (req, res) => {
     // proccess store log
     const app_log = {
-        user_id: req.body.login_user_id,
+        user_id: req.body[0].login_user_id,
         action: 'write',
         feature: 'NumberDetail',
         old_data: '',
@@ -77,7 +55,7 @@ const createResultNumberDetail = asyncHandler(async (req, res) => {
         if (!result_post || !result_schedule || !result_date) {
             res.status(200).json(new ResultMessage(CODE.REQUIRE, MESSAGE.REQUIRE));
         }
-        const numberDetail = await NumberDetail.create(
+        await NumberDetail.create(
             {
                 type: LOTTERY_TYPE.LOTTERY_RESULT,
                 result_post: result_post,
@@ -100,7 +78,7 @@ const createResultNumberDetail = asyncHandler(async (req, res) => {
 const deleteResultNumberDetail = asyncHandler(async (req, res) => {
     // proccess store log
     const app_log = {
-        user_id: req.body.login_user_id,
+        user_id: req.query.login_user_id,
         action: 'delete',
         feature: 'NumberDetail',
         old_data: '',
